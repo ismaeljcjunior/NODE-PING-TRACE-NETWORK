@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model destinations {
+  ID_DESTINATIONS                      Int                    @id @unique @default(autoincrement())
+  CSID_DESTINATIONS                    String
+  NAME_DESTINATIONS                    String
+  ID_EMP_DESTINATIONS                  String
+  IP_GATEWAY_DESTINATIONS              String
+  STATUS_DESTINATIONS                  String
+  DT_CREATED                           DateTime
+  destination_equipment                destination_equipment? @relation(fields: [destination_equipmentID_DESTINATIONS], references: [ID_DESTINATIONS])
+  destination_equipmentID_DESTINATIONS Int?
+}
+
+model destination_equipment {
+  ID_DESTINATIONS       Int            @id @unique
+  NAME_EQUIPAMEMENT     String
+  PRODUCER_EQUIPAMEMENT String
+  MODEL_EQUIPAMENT      String
+  HANDLE_HABILITY       String
+  STATUS_EQUIPAMEMENT   String
+  DT_EXECUTE            DateTime
+  destinations          destinations[]
+}
