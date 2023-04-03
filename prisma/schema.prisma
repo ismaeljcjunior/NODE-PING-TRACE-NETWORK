@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,25 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model destinations {
-  ID_DESTINATIONS                      Int                    @id @unique @default(autoincrement())
-  CSID_DESTINATIONS                    String
-  NAME_DESTINATIONS                    String
-  ID_EMP_DESTINATIONS                  String
-  IP_GATEWAY_DESTINATIONS              String
-  STATUS_DESTINATIONS                  String
-  DT_CREATED                           DateTime
-  destination_equipment                destination_equipment? @relation(fields: [destination_equipmentID_DESTINATIONS], references: [ID_DESTINATIONS])
-  destination_equipmentID_DESTINATIONS Int?
+model host {
+  ID_HOST         Int      @id @unique @default(autoincrement())
+  CSID_HOST       String   @unique
+  NAME_HOST       String
+  ID_EMP_HOST     String
+  IP_GATEWAY_HOST String
+  STATUS_HOST     String
+  DT_CREATED      DateTime
+
+  host_equipment host_equipment[]
 }
 
-model destination_equipment {
-  ID_DESTINATIONS       Int            @id @unique
-  NAME_EQUIPAMEMENT     String
-  PRODUCER_EQUIPAMEMENT String
-  MODEL_EQUIPAMENT      String
-  HANDLE_HABILITY       String
-  STATUS_EQUIPAMEMENT   String
-  DT_EXECUTE            DateTime
-  destinations          destinations[]
+model host_equipment {
+  ID_EQUIPMENT Int @id @unique @default(autoincrement())
+
+  NAME_EQUIPMENT     String
+  PRODUCER_EQUIPMENT String
+  MODEL_EQUIPMENT    String
+  HANDLE_HABILITY    String
+  IP_EQUIPMENT       String
+  STATUS_EQUIPMENT   String
+  DT_EXECUTE         DateTime
+
+  host      host?  @relation(fields: [CSID_HOST], references: [CSID_HOST])
+  CSID_HOST String
 }
