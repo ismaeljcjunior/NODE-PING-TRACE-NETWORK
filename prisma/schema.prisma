@@ -8,13 +8,13 @@ datasource db {
 }
 
 model host {
-  ID_HOST         Int      @id @unique @default(autoincrement())
-  CSID_HOST       String   @unique
-  NAME_HOST       String
-  ID_EMP_HOST     String
-  IP_GATEWAY_HOST String
-  STATUS_HOST     String
-  DT_CREATED      DateTime
+  ID_HOST         Int       @id @unique @default(autoincrement())
+  CSID_HOST       String?   @unique
+  NAME_HOST       String?
+  ID_EMP_HOST     String?
+  IP_GATEWAY_HOST String?
+  STATUS_HOST     String?
+  DT_CREATED      DateTime?
 
   host_equipment host_equipment[]
 }
@@ -22,13 +22,13 @@ model host {
 model host_equipment {
   ID_EQUIPMENT Int @id @unique @default(autoincrement())
 
-  NAME_EQUIPMENT     String
-  PRODUCER_EQUIPMENT String
-  MODEL_EQUIPMENT    String
-  HANDLE_HABILITY    String
-  IP_EQUIPMENT       String
-  STATUS_EQUIPMENT   String
-  DT_EXECUTE         DateTime
+  NAME_EQUIPMENT     String?
+  PRODUCER_EQUIPMENT String?
+  MODEL_EQUIPMENT    String?
+  HANDLE_HABILITY    String?
+  IP_EQUIPMENT       String?
+  STATUS_EQUIPMENT   String?
+  DT_EXECUTE         DateTime?
 
   host      host?  @relation(fields: [CSID_HOST], references: [CSID_HOST])
   CSID_HOST String

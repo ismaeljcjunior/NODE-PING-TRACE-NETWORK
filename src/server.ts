@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express'
 import nodeSchedule from 'node-schedule'
 import pingman from 'pingman'
 import { PrismaClient } from '@prisma/client'
-import { getIps, runPing } from './functions/runPing';
+import { getIps, readExcel, runPing } from './functions/runPing';
 
 const app = express()
 const port = process.env.PORT
@@ -25,7 +25,7 @@ const main = async () => {
 
 const job = nodeSchedule.scheduleJob('0-59/5  * * * * *', () => {
 
-    main()
+    readExcel()
 
 })
 
