@@ -1,12 +1,10 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
 model host {
   ID_HOST          Int       @id @unique @default(autoincrement())
   CONTA            String
@@ -21,7 +19,6 @@ model host {
   DT_EXECUCAO      DateTime? @default(now())
   DT_CRIACAO       DateTime? @default(now())
 }
-
 model event_host {
   ID_EVENT               Int      @id @unique @default(autoincrement())
   STATUS_ENVIO_EVETO     String   @default("PENDENTE")
