@@ -7,20 +7,17 @@ import express, { Request, Response } from 'express'
 const prisma = new PrismaClient()
 
 export const runPing = async (listIp: any[]) => {
-    const ips = listIp.map((obj) => obj.IP_GATEWAY_HOST)
     const pingPromises = listIp.map(async (obj) => {
-        const options: pingOptions = { logToFile: false, numberOfEchos: obj.QUANTIDADE_PERCA, timeout: 5, IPV4: true }
+        const options: pingOptions = { logToFile: false, numberOfEchos: obj.QUANTIDADE_PING, timeout: 5, IPV4: true }
         const ip = obj.IP_GATEWAY_HOST
         try {
             const response: pingResponse = await pingman(ip, options)
-            //console.log(`Ping to ${ip}: ${response.output}`)
             if (response.alive) {
-                // fazer algo se o ping for bem sucedido
-                updatePingGreen(obj)
-
+                // console.log(response)
+                updatePingGreen(obj, response)
             } else {
-                updatePinGRed(obj)
-
+                console.log(response)
+                updatePingRed(obj, response)
             }
         } catch (error) {
             console.log(`Error pinging ${ip}: ${error}`)
@@ -46,18 +43,33 @@ export const readExcel = async () => {
     })
     console.log('terminou')
 }
-export const updatePingGreen = async (obj: any) => {
-    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET STATUS_HOST = 'ALIVE' WHERE (ID_HOST = '${obj.ID_HOST}');`)
+export const updatePingGreen = async (obj: any, response: any) => {
+    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'ON-LINE' WHERE (ID_HOST = '${obj.ID_HOST}');`)
 }
-export const updatePinGRed = async (obj: any) => {
-    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET STATUS_HOST = 'DEAD' WHERE (ID_HOST = '${obj.ID_HOST}');`)
+export const updatePingRed = async (obj: any, response: any) => {
+    let total: number = 0
+
+    try {
+       
+        console.log('count',obj.CONTADOR_OFF)
+
+        total = Number(obj.CONTADOR_OFF) + 1
+        console.log('total', total)
+        await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'OFF-LINE', CONTADOR_OFF = '${total}' WHERE (ID_HOST = '${obj.ID_HOST}');`)
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+export const createEvent = async (obj: any, response: any) => {
+
 }
 export const getAllData = async (req: Request, res: Response) => {
     try {
         const data = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host`)
-        console.log(data);
+        // console.log(data);
 
-        res.status(200).json({ data: data })
+        res.status(200).json(data)
     } catch (e) {
         return res.status(404).json({ response: e })
 

@@ -1,33 +1,43 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model host {
-  ID_HOST          Int       @id @unique @default(autoincrement())
-  CONTA            String
-  NOME             String?   @db.VarChar(150)
-  ID_EMPRESA       String?   @db.VarChar(150)
-  IP_GATEWAY_HOST  String?   @db.VarChar(150)
-  DESCRICAO_HOST   String?   @db.VarChar(150)
-  ZONA_HOST        String?   @db.VarChar(150)
-  PARTICAO_HOST    String?   @db.VarChar(150)
-  QUANTIDADE_PERCA String?   @default("10")
-  STATUS_HOST      String?   @db.VarChar(150)
-  DT_EXECUCAO      DateTime? @default(now())
-  DT_CRIACAO       DateTime? @default(now())
+  ID_HOST               Int       @id @unique @default(autoincrement())
+  CONTA                 String?   @db.VarChar(50)
+  NOME                  String?   @db.VarChar(150)
+  ID_EMPRESA            String?   @db.VarChar(50)
+  IP_GATEWAY_HOST       String?   @db.VarChar(50)
+  DESCRICAO_HOST        String?   @db.VarChar(50)
+  ZONA_HOST             String?   @db.VarChar(50)
+  PARTICAO_HOST         String?   @db.VarChar(50)
+  QUANTIDADE_PING       String?   @default("10")
+  PERCA_DE_PACOTE       String?   @db.VarChar(50)
+  STATUS_HOST           String?   @default("ON-LINE")
+  CONTADOR_OFF          Int?      @default(0)
+  STATUS_INICIAL_EVENTO String?   @db.VarChar(50)
+  STATUS_ENVIO_EVENTO   String?   @db.VarChar(50)
+  DT_UPTIME             DateTime? @default(now())
+  DT_EXECUCAO           DateTime? @default(now())
+  DT_CRIACAO            DateTime? @default(now())
 }
+
 model event_host {
-  ID_EVENT               Int      @id @unique @default(autoincrement())
-  STATUS_ENVIO_EVETO     String   @default("PENDENTE")
-  CONTA_EVENTO           String?
-  DESCRICAO_HOST         String?  @db.VarChar(150)
-  NOME_EVENTO            String?  @db.VarChar(150)
-  ID_EMPRESA__EVENTO     String?  @db.VarChar(150)
-  IP_GATEWAY_HOST_EVENTO String?  @db.VarChar(150)
-  ZONA_HOST_EVENTO       String?  @db.VarChar(150)
-  PARTICAO_HOST_EVENTO   String?  @db.VarChar(150)
-  DT_CRIACAO             DateTime @default(now())
+  ID_EVENT                  Int      @id @unique @default(autoincrement())
+  HASH_ID_HASH              String   @default(uuid())
+  STATUS_ENVIO_EVENTO_SIGMA String   @default("PENDENTE")
+  CONTA_EVENTO              String?
+  DESCRICAO_HOST            String?  @db.VarChar(150)
+  NOME_EVENTO               String?  @db.VarChar(150)
+  CODIGO_EVENTO             String?  @db.VarChar(50)
+  ID_EMPRESA__EVENTO        String?  @db.VarChar(50)
+  IP_GATEWAY_HOST_EVENTO    String?  @db.VarChar(50)
+  ZONA_HOST_EVENTO          String?  @db.VarChar(50)
+  PARTICAO_HOST_EVENTO      String?  @db.VarChar(50)
+  DT_CRIACAO                DateTime @default(now())
 }
