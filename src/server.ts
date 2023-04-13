@@ -2,11 +2,12 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express, { Request, Response } from 'express'
 import nodeSchedule from 'node-schedule'
-import pingman from 'pingman'
 import { getIps, readExcel, runPing } from './functions/execFunc'
+import { appRoutes } from './routes/routes'
 
 const app = express()
 const port = process.env.PORT
+app.use(appRoutes)
 
 const main = async () => {
     try {
@@ -19,7 +20,6 @@ const main = async () => {
 const job = nodeSchedule.scheduleJob('0-59/30  * * * * *', () => {
     main()
 })
-
 app.get('/', (_req: Request, res: Response) => {
 
     res.json({ msg: 'Hello World!' })

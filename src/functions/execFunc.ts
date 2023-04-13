@@ -2,60 +2,32 @@ import pingman, { pingResponse, pingOptions } from 'pingman'
 import { PrismaClient } from '@prisma/client'
 import XLSX from 'xlsx'
 import path from 'path'
+import express, { Request, Response } from 'express'
 
 const prisma = new PrismaClient()
 
-// export const runPing = async (listIp: string[]) => {
-//     const options: pingOptions = { logToFile: true, numberOfEchos: 10, timeout: 2, IPV4: true };
-
-//     console.log('listIp', listIp)
-//     const promises = listIp.map(async (ip: string) => {
-
-//         try {
-//             const response: pingResponse = await pingman(ip, options);
-//              console.log(`Ping to ${ip}: ${response.output}`);
-//             if (response.alive) {
-//                 // updatePingGreen(ip)
-//             } else {
-//                 // updatePingRed(ip)
-
-//                 console.log(response)
-//             }
-//         } catch (error) {
-//             console.log(`Error pinging ${ip}: ${error}`);
-//             //=> 'Internal server error ...'
-//         }
-//     })
-
-//     await Promise.all(promises)
-// }
-
 export const runPing = async (listIp: any[]) => {
-    const options: pingOptions = { logToFile: false, numberOfEchos: 10, timeout: 5, IPV4: true }
-
     const ips = listIp.map((obj) => obj.IP_GATEWAY_HOST)
-    
-    const pingPromises = ips.map(async (ip) => {
+    const pingPromises = listIp.map(async (obj) => {
+        const options: pingOptions = { logToFile: false, numberOfEchos: obj.QUANTIDADE_PERCA, timeout: 5, IPV4: true }
+        const ip = obj.IP_GATEWAY_HOST
         try {
-
             const response: pingResponse = await pingman(ip, options)
             //console.log(`Ping to ${ip}: ${response.output}`)
             if (response.alive) {
                 // fazer algo se o ping for bem sucedido
-                console.log('alive');
+                updatePingGreen(obj)
 
             } else {
-                console.log('dead')
+                updatePinGRed(obj)
+
             }
         } catch (error) {
             console.log(`Error pinging ${ip}: ${error}`)
         }
     })
-
     await Promise.all(pingPromises)
 }
-
-
 export const getIps = async (): Promise<string[]> => {
 
     const listIp: any = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host;`)
@@ -74,9 +46,20 @@ export const readExcel = async () => {
     })
     console.log('terminou')
 }
-export const updatePingRed = async (ip: any) => {
-    await prisma.$queryRawUnsafe(`UPDATE networktracker.host_equipment SET STATUS_EQUIPMENT = 'OFF' WHERE (IP_EQUIPMENT = '${ip}')`)
+export const updatePingGreen = async (obj: any) => {
+    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET STATUS_HOST = 'ALIVE' WHERE (ID_HOST = '${obj.ID_HOST}');`)
 }
-export const updatePingGreen = async (ip: any) => {
-    await prisma.$queryRawUnsafe(`UPDATE networktracker.host_equipment SET STATUS_EQUIPMENT = 'LIVE' WHERE (IP_EQUIPMENT = '${ip}')`)
+export const updatePinGRed = async (obj: any) => {
+    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET STATUS_HOST = 'DEAD' WHERE (ID_HOST = '${obj.ID_HOST}');`)
+}
+export const getAllData = async (req: Request, res: Response) => {
+    try {
+        const data = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host`)
+        console.log(data);
+
+        res.status(200).json({ data: data })
+    } catch (e) {
+        return res.status(404).json({ response: e })
+
+    }
 }
