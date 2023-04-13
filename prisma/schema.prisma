@@ -8,31 +8,29 @@ datasource db {
 }
 
 model host {
-  ID_HOST         Int       @id @unique @default(autoincrement())
-  CSID_HOST       String?   @unique
-  NAME_HOST       String?   @db.VarChar(250)
-  ID_EMP_HOST     String?   @db.VarChar(250)
-  IP_GATEWAY_HOST String?   @db.VarChar(250)
-  ZONE_HOST       String?   @db.VarChar(250)
-  PARTITION_HOST  String?   @db.VarChar(250)
-  STATUS_HOST     String?   @db.VarChar(250)
-  DT_EXEC         DateTime? @default(now())
-  DT_CREATED      DateTime? @default(now())
-
-  host_equipment host_equipment[]
+  ID_HOST          Int       @id @unique @default(autoincrement())
+  CONTA            String
+  NOME             String?   @db.VarChar(150)
+  ID_EMPRESA       String?   @db.VarChar(150)
+  IP_GATEWAY_HOST  String?   @db.VarChar(150)
+  DESCRICAO_HOST   String?   @db.VarChar(150)
+  ZONA_HOST        String?   @db.VarChar(150)
+  PARTICAO_HOST    String?   @db.VarChar(150)
+  QUANTIDADE_PERCA String?   @default("10")
+  STATUS_HOST      String?   @db.VarChar(150)
+  DT_EXECUCAO      DateTime? @default(now())
+  DT_CRIACAO       DateTime? @default(now())
 }
 
-model host_equipment {
-  ID_EQUIPMENT Int @id @unique @default(autoincrement())
-
-  NAME_EQUIPMENT     String?
-  PRODUCER_EQUIPMENT String?
-  MODEL_EQUIPMENT    String?
-  HANDLE_HABILITY    String?
-  IP_EQUIPMENT       String?
-  STATUS_EQUIPMENT   String?
-  DT_EXECUTE         DateTime?
-
-  host      host?  @relation(fields: [CSID_HOST], references: [CSID_HOST])
-  CSID_HOST String
+model event_host {
+  ID_EVENT               Int      @id @unique @default(autoincrement())
+  STATUS_ENVIO_EVETO     String   @default("PENDENTE")
+  CONTA_EVENTO           String?
+  DESCRICAO_HOST         String?  @db.VarChar(150)
+  NOME_EVENTO            String?  @db.VarChar(150)
+  ID_EMPRESA__EVENTO     String?  @db.VarChar(150)
+  IP_GATEWAY_HOST_EVENTO String?  @db.VarChar(150)
+  ZONA_HOST_EVENTO       String?  @db.VarChar(150)
+  PARTICAO_HOST_EVENTO   String?  @db.VarChar(150)
+  DT_CRIACAO             DateTime @default(now())
 }

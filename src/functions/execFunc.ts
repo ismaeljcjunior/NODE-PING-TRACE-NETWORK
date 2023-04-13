@@ -6,6 +6,7 @@ import path from 'path'
 const prisma = new PrismaClient()
 
 export const runPing = async (listIp: string[]) => {
+    
     const options: pingOptions = { logToFile: true, numberOfEchos: 10, timeout: 2, IPV4: true };
 
     const promises = listIp.map(async (ip: string) => {
@@ -13,9 +14,9 @@ export const runPing = async (listIp: string[]) => {
             const response: pingResponse = await pingman(ip, options);
             // console.log(`Ping to ${ip}: ${response.output}`);
             if (response.alive) {
-                updatePingGreen(ip)
+                // updatePingGreen(ip)
             } else {
-                updatePingRed(ip)
+                // updatePingRed(ip)
 
                 console.log(response)
             }
@@ -29,7 +30,7 @@ export const runPing = async (listIp: string[]) => {
 }
 export const getIps = async (): Promise<string[]> => {
     const listIp: any = [];
-    const ipHost: any = await prisma.$queryRawUnsafe(`SELECT IP_EQUIPMENT FROM networktracker.host_equipment`)
+    const ipHost: any = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host;`)
     for (let i = 0; i < ipHost.length; i++) {
         let aux = ipHost[i].IP_EQUIPMENT.toString()
         listIp.push(aux)
