@@ -3,14 +3,10 @@ dotenv.config()
 import express, { Request, Response } from 'express'
 import nodeSchedule from 'node-schedule'
 import pingman from 'pingman'
-import { PrismaClient } from '@prisma/client'
-import { getIps, readExcel, runPing } from './functions/runPing';
+import { getIps, readExcel, runPing } from './functions/execFunc'
 
 const app = express()
 const port = process.env.PORT
-const prisma = new PrismaClient()
-
-
 
 const main = async () => {
     try {
@@ -20,13 +16,8 @@ const main = async () => {
         console.log(`Error: ${err}`)
     }
 }
-
-
-
 const job = nodeSchedule.scheduleJob('0-59/5  * * * * *', () => {
-
-    readExcel()
-
+    main()
 })
 
 app.get('/', (_req: Request, res: Response) => {

@@ -1,24 +1,23 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
 model host {
   ID_HOST         Int       @id @unique @default(autoincrement())
   CSID_HOST       String?   @unique
-  NAME_HOST       String?
-  ID_EMP_HOST     String?
-  IP_GATEWAY_HOST String?
-  STATUS_HOST     String?
-  DT_CREATED      DateTime?
+  NAME_HOST       String?   @db.VarChar(250)
+  ID_EMP_HOST     String?   @db.VarChar(250)
+  IP_GATEWAY_HOST String?   @db.VarChar(250)
+  ZONE_HOST       String?   @db.VarChar(250)
+  PARTITION_HOST  String?   @db.VarChar(250)
+  STATUS_HOST     String?   @db.VarChar(250)
+  DT_CREATED      DateTime? @default(now())
 
   host_equipment host_equipment[]
 }
-
 model host_equipment {
   ID_EQUIPMENT Int @id @unique @default(autoincrement())
 
