@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model host {
   ID_HOST         Int       @id @unique @default(autoincrement())
   CSID_HOST       String?   @unique
@@ -14,10 +16,12 @@ model host {
   ZONE_HOST       String?   @db.VarChar(250)
   PARTITION_HOST  String?   @db.VarChar(250)
   STATUS_HOST     String?   @db.VarChar(250)
+  DT_EXEC         DateTime? @default(now())
   DT_CREATED      DateTime? @default(now())
 
   host_equipment host_equipment[]
 }
+
 model host_equipment {
   ID_EQUIPMENT Int @id @unique @default(autoincrement())
 
