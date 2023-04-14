@@ -1,12 +1,10 @@
 import express, { Express, Request, Response } from 'express'
-// import { createUser, deleteUser, getUsers, updateUser } from '../controller/usuarioController'
 import bodyParser from 'body-parser'
 import cors from 'cors'
-import { getAllData } from '../functions/execFunc'
+import { getAllData } from '../controller/hostController'
 
 
 const app: Express = express()
-
 
 app.use(bodyParser.json())
 app.use(cors({ origin: '*' }))

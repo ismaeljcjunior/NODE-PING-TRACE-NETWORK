@@ -3,8 +3,11 @@ import { PrismaClient } from '@prisma/client'
 import XLSX from 'xlsx'
 import path from 'path'
 import express, { Request, Response } from 'express'
+import moment from 'moment'
 
 const prisma = new PrismaClient()
+const date = moment()
+const dateFormat = date.format("HH:mm:ss DD/MM/YYYY ")
 
 export const runPing = async (listIp: any[]) => {
     const pingPromises = listIp.map(async (obj) => {
@@ -13,11 +16,11 @@ export const runPing = async (listIp: any[]) => {
         try {
             const response: pingResponse = await pingman(ip, options)
             if (response.alive) {
-                // console.log(response)
-                updatePingGreen(obj, response)
+
+                updatePingUp(obj, response)
             } else {
-                console.log(response)
-                updatePingRed(obj, response)
+
+                updatePingDown(obj, response)
             }
         } catch (error) {
             console.log(`Error pinging ${ip}: ${error}`)
@@ -43,35 +46,35 @@ export const readExcel = async () => {
     })
     console.log('terminou')
 }
-export const updatePingGreen = async (obj: any, response: any) => {
-    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'ON-LINE' WHERE (ID_HOST = '${obj.ID_HOST}');`)
+export const updatePingUp = async (obj: any, response: any) => {
+    console.log('PING IP:', response.numericHost, '- DATA', dateFormat, '- PERDA DE PACOTE', response.packetLoss, '- STATUS', response.alive)
+    await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'ON-LINE', DT_UPTIME = IFNULL(DT_UPTIME, NOW()), DT_EXECUCAO = NOW(), CONTADOR_OFF = 0 WHERE ID_HOST = '${obj.ID_HOST}';`)
 }
-export const updatePingRed = async (obj: any, response: any) => {
+export const updatePingDown = async (obj: any, response: any) => {
     let total: number = 0
-
+    console.log('PING IP:', response.numericHost, '- DATA', dateFormat, '- PERDA DE PACOTE', response.packetLoss, '- STATUS', response.alive)
     try {
-       
-        console.log('count',obj.CONTADOR_OFF)
-
         total = Number(obj.CONTADOR_OFF) + 1
-        console.log('total', total)
-        await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'OFF-LINE', CONTADOR_OFF = '${total}' WHERE (ID_HOST = '${obj.ID_HOST}');`)
-
+        await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', STATUS_HOST = 'OFF-LINE', CONTADOR_OFF = '${total}', DT_EXECUCAO = NOW(), DT_UPTIME = NULL, DT_DOWTIME = IFNULL(DT_DOWTIME, NOW())  WHERE (ID_HOST = '${obj.ID_HOST}');`)
     } catch (e) {
         console.log(e)
     }
 }
-export const createEvent = async (obj: any, response: any) => {
-
-}
-export const getAllData = async (req: Request, res: Response) => {
+export const getDateDiffUp = async (obj: any, response: any) => {
     try {
-        const data = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host`)
-        // console.log(data);
-
-        res.status(200).json(data)
+        const resultHost = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host WHERE ID_HOST = '${obj.ID_HOST}`)
+        
     } catch (e) {
-        return res.status(404).json({ response: e })
 
     }
+}
+export const getDateDiffDown = async (obj: any, response: any) => {
+    try {
+
+    } catch (e) {
+
+    }
+}
+export const createEvent = async (obj: any, response: any) => {
+
 }
