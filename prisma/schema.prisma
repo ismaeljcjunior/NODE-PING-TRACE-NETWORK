@@ -19,13 +19,14 @@ model host {
   QUANTIDADE_PING       String?   @default("10")
   PERCA_DE_PACOTE       String?   @db.VarChar(50)
   STATUS_HOST           String?   @default("ON-LINE")
-  CONTADOR_OFF          Int?      @default(0)
-  STATUS_INICIAL_EVENTO String?   @db.VarChar(50)
+  STATUS_INICIAL_EVENTO String?   @db.VarChar(50)@default("OK")
   STATUS_ENVIO_EVENTO   String?   @db.VarChar(50)
   DT_UPTIME             DateTime?
   DT_DOWTIME            DateTime?
   DT_DIF_TIME_UP        String?
   DT_DIF_TIME_DOWN      String?
+  CONTADOR_ON           Int?      @default(0)
+  CONTADOR_OFF          Int?      @default(0)
   DT_EXECUCAO           DateTime? @default(now())
   DT_CRIACAO            DateTime? @default(now())
 }

@@ -17,7 +17,7 @@ const main = async () => {
         console.log(`Error: ${err}`)
     }
 }
-const job = nodeSchedule.scheduleJob('0-59/20  * * * * *', () => {
+const job = nodeSchedule.scheduleJob('0-59/59  * * * * *', () => {
     main()
 })
 app.get('/', (_req: Request, res: Response) => {
