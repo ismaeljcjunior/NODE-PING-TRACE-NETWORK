@@ -12,7 +12,7 @@ model host {
   CONTA                 String?   @db.VarChar(50)
   NOME                  String?   @db.VarChar(150)
   ID_EMPRESA            String?   @db.VarChar(50)
-  IP_GATEWAY_HOST       String?   @unique @db.VarChar(100)
+  IP_GATEWAY_HOST       String?   @db.VarChar(100)
   DESCRICAO_HOST        String?   @db.VarChar(100)
   ZONA_HOST             String?   @db.VarChar(100)
   PARTICAO_HOST         String?   @db.VarChar(50)
@@ -31,8 +31,6 @@ model host {
   DT_CRIACAO            DateTime? @default(now())
 
   events event_host[]
-
-  @@unique([ID_HOST, IP_GATEWAY_HOST])
 }
 
 model event_host {
@@ -42,13 +40,13 @@ model event_host {
   DESCRICAO_HOST            String?   @db.VarChar(150)
   NOME_EVENTO               String?   @db.VarChar(150)
   CODIGO_EVENTO             String?   @db.VarChar(50)
-  ID_EMPRESA_EVENTO         String?   @db.VarChar(50)
+  ID_EMPRESA__EVENTO        String?   @db.VarChar(50)
+  IP_GATEWAY_HOST_EVENTO    String?   @db.VarChar(50)
   ZONA_HOST_EVENTO          String?   @db.VarChar(50)
   PARTICAO_HOST_EVENTO      String?   @db.VarChar(50)
   DT_DIFF                   DateTime?
   DT_CRIACAO                DateTime? @default(now())
 
-  host            host   @relation(fields: [id_host, IP_GATEWAY_HOST], references: [ID_HOST, IP_GATEWAY_HOST])
-  id_host         Int
-  IP_GATEWAY_HOST String
+  host    host @relation(fields: [host_id], references: [ID_HOST])
+  host_id Int
 }
