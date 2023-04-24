@@ -49,7 +49,7 @@ export const updatePingUp = async (obj: any, response: any) => {
         total = Number(obj.CONTADOR_ON) + 1
         // console.log('PING IP UP:', response.numericHost, '- DATA', dateFormat, '- PERDA DE PACOTE', response.packetLoss, '- STATUS', response.alive)
         await updateDateDiffUp(obj)
-        await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', CONTADOR_ON = '${total}', STATUS_HOST = 'ON-LINE', DT_UPTIME = IFNULL(DT_UPTIME, NOW()), DT_EXECUCAO = NOW(), CONTADOR_OFF = 0 WHERE ID_HOST = '${obj.ID_HOST}'`)
+        await prisma.$queryRawUnsafe(`UPDATE networktracker.host SET PERCA_DE_PACOTE = '${response.packetLoss}', CONTADOR_ON = '${total}', STATUS_HOST = 'ON-LINE', DT_UPTIME = IFNULL(DT_UPTIME, NOW()), DT_EXECUCAO = NOW(), CONTADOR_OFF = 0,STATUS_ENVIO_EVENTO=''  WHERE ID_HOST = '${obj.ID_HOST}'`)
     } catch (e) {
         console.log(e.message)
     }
@@ -140,7 +140,7 @@ export const createEventDown = async (obj: any) => {
     const nameError = 'FALHA DE COMUNICAÇÃO'
     try {
         await prisma.$queryRawUnsafe(` INSERT INTO event_host (STATUS_ENVIO_EVENTO_SIGMA, CONTA_EVENTO, DESCRICAO_HOST, NOME_EVENTO, CODIGO_EVENTO, ID_EMPRESA_EVENTO, ZONA_HOST_EVENTO, PARTICAO_HOST_EVENTO, IP_GATEWAY_HOST, ID_HOST  )  VALUES ('PENDENTE', '${obj.CONTA}',  '${obj.DESCRICAO_HOST}',  '${nameError}', '${error}', '${obj.ID_EMPRESA}',  '${obj.ZONA_HOST}',  '${obj.PARTICAO_HOST}', '${obj.IP_GATEWAY_HOST}', '${obj.ID_HOST}')`)
-        
+
     } catch (e) {
         console.error(e.message)
     }
