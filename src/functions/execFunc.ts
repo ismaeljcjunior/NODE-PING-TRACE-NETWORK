@@ -13,7 +13,6 @@ const dateFormat = date.format("HH:mm:ss DD/MM/YYYY")
 export const runPing = async (listIp: any[]) => {
     const pingPromises = listIp.map(async (obj: IHostProps) => {
         const options: pingOptions = { logToFile: false, numberOfEchos: obj.QUANTIDADE_PING, timeout: 5, IPV4: true }
-
         const ip = obj.IP_GATEWAY_HOST
         if (ip !== undefined) {
             try {
