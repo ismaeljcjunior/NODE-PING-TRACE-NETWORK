@@ -3,7 +3,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { getAllData } from '../controller/hostController'
 
-
 const app: Express = express()
 
 app.use(bodyParser.json())

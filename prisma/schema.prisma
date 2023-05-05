@@ -1,54 +1,79 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-model host {
-  ID_HOST               Int       @id @unique @default(autoincrement())
-  CONTA                 String?   @db.VarChar(50)
-  NOME                  String?   @db.VarChar(150)
-  ID_EMPRESA            String?   @db.VarChar(50)
-  IP_GATEWAY_HOST       String?   @unique @db.VarChar(100)
-  DESCRICAO_HOST        String?   @db.VarChar(100)
-  ZONA_HOST             String?   @db.VarChar(100)
-  PARTICAO_HOST         String?   @db.VarChar(50)
-  QUANTIDADE_PING       String?   @default("10")
-  PERCA_DE_PACOTE       String?   @db.VarChar(50)
-  STATUS_HOST           String?   @default("ON-LINE")
-  STATUS_INICIAL_EVENTO String?   @default("OK") @db.VarChar(50)
-  STATUS_ENVIO_EVENTO   String?   @db.VarChar(50)
-  DT_UPTIME             DateTime?
-  DT_DOWNTIME           DateTime?
-  DT_DIF_TIME_UP        String?   @default("0")
-  DT_DIF_TIME_DOWN      String?   @default("0")
-  CONTADOR_ON           Int?      @default(0)
-  CONTADOR_OFF          Int?      @default(0)
-  DT_EXECUCAO           DateTime? @default(now())
-  DT_CRIACAO            DateTime? @default(now())
-
-  events event_host[]
-
-  @@unique([ID_HOST, IP_GATEWAY_HOST])
+model conta {
+  ID_CONTA         Int           @id @unique @default(autoincrement())
+  CSID             Int           @unique
+  ID_EMPRESA       String?       @db.VarChar(10)
+  RAZAO            String?       @db.VarChar(150)
+  FANTASIA         String?       @db.VarChar(150)
+  ENDERECO         String?       @db.VarChar(150)
+  ESTADO           String?       @db.VarChar(50)
+  CIDADE           String?       @db.VarChar(50)
+  EMAIL_RESPOSAVEL String?       @db.VarChar(50)
+  NUMERO_CELULAR   String?       @db.VarChar(50)
+  NUMERO_FIXO      String?       @db.VarChar(50)
+  DATA_CRIACAO     DateTime?     @default(now())
+  DATA_ATUALIZACAO DateTime?     @updatedAt
+  equipamento      equipamento[]
 }
 
-model event_host {
-  ID_EVENT                  Int       @id @unique @default(autoincrement())
-  STATUS_ENVIO_EVENTO_SIGMA String    @default("PENDENTE")
-  CONTA_EVENTO              String?
-  DESCRICAO_HOST            String?   @db.VarChar(150)
-  NOME_EVENTO               String?   @db.VarChar(150)
-  CODIGO_EVENTO             String?   @db.VarChar(50)
-  ID_EMPRESA_EVENTO         String?   @db.VarChar(50)
-  ZONA_HOST_EVENTO          String?   @db.VarChar(50)
-  PARTICAO_HOST_EVENTO      String?   @db.VarChar(50)
-  DT_DIFF                   DateTime?
-  DT_CRIACAO                DateTime? @default(now())
+model equipamento {
+  ID_EQUIPAMENTO  Int     @id @unique @default(autoincrement())
+  DESCRICAO       String?
+  CSID            Int
+  ZONA            String? @db.VarChar(50)
+  PARTICAO        String? @db.VarChar(50)
+  ENDERECO_IP     String? @db.VarChar(50)
+  QUANTIDADE_PING Int?    @default(10)
 
-  host            host   @relation(fields: [id_host, IP_GATEWAY_HOST], references: [ID_HOST, IP_GATEWAY_HOST])
-  id_host         Int
-  IP_GATEWAY_HOST String
+  DATA_CRIACAO     DateTime? @default(now())
+  DATA_ATUALIZACAO DateTime? @updatedAt
+  conta            conta     @relation(fields: [CSID], references: [CSID])
 }
+
+model ping {
+  ID_PING Int @id @unique @default(autoincrement())
+}
+
+// model host {
+//   ID_HOST               Int       @id @unique @default(autoincrement())
+//   CONTA                 String?   @db.VarChar(50)
+//   NOME                  String?   @db.VarChar(150)
+//   ID_EMPRESA            String?   @db.VarChar(50)
+//   IP_GATEWAY_HOST       String?   @unique @db.VarChar(100)
+//   DESCRICAO_HOST        String?   @db.VarChar(100)
+//   ZONA_HOST             String?   @db.VarChar(100)
+//   PARTICAO_HOST         String?   @db.VarChar(50)
+//   QUANTIDADE_PING       String?   @default("10")
+//   PERCA_DE_PACOTE       String?   @db.VarChar(50)
+//   STATUS_HOST           String?   @default("ON-LINE")
+//   STATUS_INICIAL_EVENTO String?   @default("OK") @db.VarChar(50)
+//   STATUS_ENVIO_EVENTO   String?   @db.VarChar(50)
+//   DT_UPTIME             DateTime?
+//   DT_DOWNTIME           DateTime?
+//   DT_DIF_TIME_UP        String?   @default("0")
+//   DT_DIF_TIME_DOWN      String?   @default("0")
+//   CONTADOR_ON           Int?      @default(0)
+//   CONTADOR_OFF          Int?      @default(0)
+//   DT_EXECUCAO           DateTime? @default(now())
+//   DT_CRIACAO            DateTime? @default(now())
+// }
+
+// model event_host {
+//   ID_EVENT                  Int       @id @unique @default(autoincrement())
+//   STATUS_ENVIO_EVENTO_SIGMA String    @default("PENDENTE")
+//   CONTA_EVENTO              String?
+//   DESCRICAO_HOST            String?   @db.VarChar(150)
+//   NOME_EVENTO               String?   @db.VarChar(150)
+//   CODIGO_EVENTO             String?   @db.VarChar(50)
+//   ID_EMPRESA_EVENTO         String?   @db.VarChar(50)
+//   ZONA_HOST_EVENTO          String?   @db.VarChar(50)
+//   PARTICAO_HOST_EVENTO      String?   @db.VarChar(50)
+//   DT_DIFF                   DateTime?
+//   DT_CRIACAO                DateTime? @default(now())
+// }
