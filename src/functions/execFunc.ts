@@ -5,7 +5,6 @@ import path from 'path'
 import moment from 'moment'
 import { IHostProps } from '../interfaces/interfaces'
 
-
 const prisma = new PrismaClient()
 const date = moment()
 const dateFormat = date.format("HH:mm:ss DD/MM/YYYY")
@@ -102,7 +101,6 @@ export const createEventUP = async (obj: any) => {
         console.error(e.message)
     }
 }
-
 export const checkTimeDOWN = async (obj: any) => {
     try {
         const resultDiffMinutes: any = await prisma.$queryRawUnsafe(`SELECT TIMESTAMPDIFF(MINUTE, DT_DOWNTIME, DT_EXECUCAO) AS DIFF_MINUTES FROM networktracker.host WHERE (ID_HOST = '${obj.ID_HOST}') `)
@@ -144,9 +142,6 @@ export const createEventDown = async (obj: any) => {
         console.error(e.message)
     }
 }
-
-
-
 export const readExcel = async () => {
     const workbook = XLSX.readFile(path.join(__dirname, 'utils', 'PORTARIAS.xlsx'))
     const sheet_name_list = workbook.SheetNames
