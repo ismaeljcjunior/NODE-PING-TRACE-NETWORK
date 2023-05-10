@@ -25,21 +25,34 @@ model conta {
 }
 
 model equipamento {
-  ID_EQUIPAMENTO  Int     @id @unique @default(autoincrement())
-  DESCRICAO       String?
-  CSID            Int
-  ZONA            String? @db.VarChar(50)
-  PARTICAO        String? @db.VarChar(50)
-  ENDERECO_IP     String? @db.VarChar(50)
-  QUANTIDADE_PING Int?    @default(10)
+  ID_EQUIPAMENTO        Int       @id @unique @default(autoincrement())
+  DESCRICAO             String?
+  CSID                  Int
+  ZONA                  String?   @db.VarChar(50)
+  PARTICAO              String?   @db.VarChar(50)
+  ENDERECO_IP           String?   @unique @db.VarChar(50)
+  QUANTIDADE_PING       Int?      @default(10)
+  STATUS_EQUIP          String?   @db.VarChar(50)
+  STATUS_INICIAL_EVENTO String?   @default("INICIADO")
+  STATUS_ENVIO_EVENTO   String?   @db.VarChar(50)
+  DATA_CRIACAO          DateTime? @default(now())
+  DATA_ATUALIZACAO      DateTime? @updatedAt
 
-  DATA_CRIACAO     DateTime? @default(now())
-  DATA_ATUALIZACAO DateTime? @updatedAt
-  conta            conta     @relation(fields: [CSID], references: [CSID])
+  conta conta @relation(fields: [CSID], references: [CSID])
 }
 
 model ping {
-  ID_PING Int @id @unique @default(autoincrement())
+  ID_PING           Int       @id @unique @default(autoincrement())
+  PERCA_DE_PACOTE   String?   @db.VarChar(50)
+  STATUS_IP         String?   @db.VarChar(50)
+  QUANTIDADE_PING   Int?      @default(10)
+  HORARIO_REALIZADO DateTime?
+  DATA_OFFLINE      DateTime?
+  DATA_ONLINE       DateTime?
+  DATA_DIFF_ONLINE  String?   @db.VarChar(50)
+  DATA_DIFF_OFFLINE String?   @db.VarChar(50)
+  DATA_CRIACAO      DateTime? @default(now())
+  DATA_ATUALIZACAO  DateTime? @updatedAt
 }
 
 // model host {
