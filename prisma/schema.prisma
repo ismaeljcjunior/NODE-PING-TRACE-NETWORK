@@ -45,6 +45,7 @@ model ping {
   ID_PING           Int       @id @unique @default(autoincrement())
   PERCA_DE_PACOTE   String?   @db.VarChar(50)
   STATUS_IP         String?   @db.VarChar(50)
+  ENDERECO_IP       String?   @unique @db.VarChar(50)
   QUANTIDADE_PING   Int?      @default(10)
   HORARIO_REALIZADO DateTime?
   DATA_OFFLINE      DateTime?
@@ -78,7 +79,6 @@ model ping {
 //   DT_EXECUCAO           DateTime? @default(now())
 //   DT_CRIACAO            DateTime? @default(now())
 // }
-
 // model event_host {
 //   ID_EVENT                  Int       @id @unique @default(autoincrement())
 //   STATUS_ENVIO_EVENTO_SIGMA String    @default("PENDENTE")
