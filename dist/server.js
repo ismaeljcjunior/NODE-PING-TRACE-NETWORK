@@ -16919,6 +16919,17 @@ var import_moment2 = __toESM(require("moment"));
 var import_client2 = require("@prisma/client");
 var date2 = (0, import_moment2.default)();
 var prisma2 = new import_client2.PrismaClient();
+var objectHost = {
+  IP_HOST: "",
+  NOME: "",
+  DATE_OFF: "",
+  DATE_ON: "",
+  STATUS_OFF: "",
+  STATUS_ON: "",
+  COUNT_OFF: 10,
+  COUNT_ON: 10,
+  ERROR_CODE: ""
+};
 var runPingMain = async () => {
   const dateFormat2 = date2.format("HH:mm:ss:mm DD/MM/YYYY ");
   console.log("runPingMain:", dateFormat2);
@@ -16956,6 +16967,9 @@ var executePing = async (ipHost) => {
       return new Promise((resolve, reject) => {
         if (host.IP_GATEWAY_HOST) {
           import_ping.default.promise.probe(host.IP_GATEWAY_HOST).then((res) => {
+            objectHost.IP_HOST = host.IP_GATEWAY_HOST;
+            objectHost.NOME = host.NOME;
+            console.log(objectHost);
             if (res.alive) {
               console.log("ping live", res.inputHost);
               resolve("ping alive");

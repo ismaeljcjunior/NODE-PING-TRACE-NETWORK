@@ -6,7 +6,9 @@ import { IHostPingProps, IHostProps } from '../interfaces/interfaces'
 const date = moment()
 const prisma = new PrismaClient()
 let objectHost: IHostPingProps = {
+
     IP_HOST: '',
+    NOME: '',
     DATE_OFF: '',
     DATE_ON: '',
     STATUS_OFF: '',
@@ -15,7 +17,6 @@ let objectHost: IHostPingProps = {
     COUNT_ON: 10,
     ERROR_CODE: '',
 }
-
 export const runPingMain = async () => {
     const dateFormat = date.format("HH:mm:ss:mm DD/MM/YYYY ")
     console.log('runPingMain:', dateFormat)
@@ -53,10 +54,13 @@ export const executePing = async (ipHost: IHostProps[]) => {
                 if (host.IP_GATEWAY_HOST) {
                     ping.promise.probe(host.IP_GATEWAY_HOST)
                         .then((res) => {
-                            // console.log('ping', res)
+                            // Atualiza o objeto objectHost com as informações relevantes
+                            objectHost.IP_HOST = host.IP_GATEWAY_HOST
+                            objectHost.NOME = host.NOME
+                            // Outras atualizações necessárias
+                            console.log(objectHost)
                             if (res.alive) {
                                 console.log('ping live', res.inputHost);
-
                                 resolve('ping alive')
                             } else {
                                 console.log('ping dead', res.inputHost);
@@ -70,11 +74,9 @@ export const executePing = async (ipHost: IHostProps[]) => {
                 }
             })
         })
-
         return Promise.all(pingPromises) // Aguarda todas as promessas serem resolvidas
     } catch (e) {
         console.log(e)
         return []
     }
 }
-
