@@ -45,11 +45,8 @@ export const getIps = async (): Promise<IHostProps[]> => {
     const listIp: any = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host`)
     return listIp as IHostProps[]
 }
-
-
 export const executePing = async (ipHost: IHostProps[]) => {
     console.log('executePing', ipHost.length)
-    objectHost
     try {
         const pingPromises = ipHost.map((host) => {
             return new Promise((resolve, reject) => {

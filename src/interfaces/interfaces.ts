@@ -29,7 +29,7 @@ export interface IHostProps {
 
 }
 export interface IHostPingProps {
-    IP_HOST: string
+    IP_HOST: string|undefined;
     DATE_OFF: String,
     DATE_ON: String,
     STATUS_OFF: String,
