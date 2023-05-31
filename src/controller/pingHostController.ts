@@ -1,10 +1,20 @@
 import ping from 'ping'
 import moment from 'moment'
 import { PrismaClient } from '@prisma/client'
-import { IHostProps } from '../interfaces/interfaces'
+import { IHostPingProps, IHostProps } from '../interfaces/interfaces'
 
 const date = moment()
 const prisma = new PrismaClient()
+let objectHost: IHostPingProps = {
+    IP_HOST: '',
+    DATE_OFF: '',
+    DATE_ON: '',
+    STATUS_OFF: '',
+    STATUS_ON: '',
+    COUNT_OFF: 10,
+    COUNT_ON: 10,
+    ERROR_CODE: '',
+}
 
 export const runPingMain = async () => {
     const dateFormat = date.format("HH:mm:ss:mm DD/MM/YYYY ")
@@ -35,9 +45,11 @@ export const getIps = async (): Promise<IHostProps[]> => {
     const listIp: any = await prisma.$queryRawUnsafe(`SELECT * FROM networktracker.host`)
     return listIp as IHostProps[]
 }
+
+
 export const executePing = async (ipHost: IHostProps[]) => {
     console.log('executePing', ipHost.length)
-
+    objectHost
     try {
         const pingPromises = ipHost.map((host) => {
             return new Promise((resolve, reject) => {
