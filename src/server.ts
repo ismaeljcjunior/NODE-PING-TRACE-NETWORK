@@ -1,28 +1,27 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import express, { Request, Response } from 'express'
+import express, { Express } from 'express'
 import nodeSchedule from 'node-schedule'
-import { getIps, readExcel, runPing } from './functions/execFunc'
 import { appRoutes } from './routes/routes'
+import { runPingMain } from './controller/pingHostController'
+import moment from 'moment'
 
-const app = express()
+const app: Express = express()
 const port = process.env.PORT
+const date = moment()
 app.use(appRoutes)
 
 const main = async () => {
+    const dateFormat = date.format("HH:mm:ss:mm DD/MM/YYYY ")
     try {
-        const ipHost = await getIps()
-        await runPing(ipHost)
+        console.log('Run main:', dateFormat)
+        await runPingMain()
     } catch (err) {
         console.log(`Error: ${err}`)
     }
 }
-const job = nodeSchedule.scheduleJob('0-59/5  * * * * *', () => {
+const job = nodeSchedule.scheduleJob('0-59/15 * * * * *', () => {
     main()
-})
-app.get('/', (_req: Request, res: Response) => {
-
-    res.json({ msg: 'Hello World!' })
 })
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`)

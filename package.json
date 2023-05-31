@@ -1,34 +1,27 @@
 {
-  "name": "node-ping-trace-network",
+  "name": "NODE-PING-TRACE-NETWORK-2.0",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ismaeljcjunior/NODE-PING-TRACE-NETWORK.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ismaeljcjunior/NODE-PING-TRACE-NETWORK/issues"
-  },
-  "homepage": "https://github.com/ismaeljcjunior/NODE-PING-TRACE-NETWORK#readme",
+  "license": "MIT",
   "dependencies": {
-    "@types/express": "^4.17.17",
-    "@types/node-schedule": "^2.1.0",
+    "@prisma/client": "^4.15.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "moment": "^2.29.4",
     "node-schedule": "^2.1.1",
-    "pingman": "^2.0.0"
+    "ping": "^0.4.4",
+    "prisma": "^4.15.0"
   },
   "devDependencies": {
-    "@prisma/client": "^4.12.0",
     "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node-schedule": "^2.1.0",
+    "@types/ping": "^0.4.1",
+    "dotenv": "^16.1.1",
     "nodemon": "^2.0.22",
-    "prisma": "^4.12.0",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.3"
+    "types": "^0.1.1",
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "build": "tsup src",
