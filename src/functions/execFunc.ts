@@ -1,7 +1,5 @@
 import pingman, { pingResponse, pingOptions } from 'pingman'
 import { PrismaClient } from '@prisma/client'
-import XLSX from 'xlsx'
-import path from 'path'
 import moment from 'moment'
 import { IHostProps } from '../interfaces/interfaces'
 
@@ -141,16 +139,4 @@ export const createEventDown = async (obj: any) => {
     } catch (e) {
         console.error(e.message)
     }
-}
-export const readExcel = async () => {
-    const workbook = XLSX.readFile(path.join(__dirname, 'utils', 'PORTARIAS.xlsx'))
-    const sheet_name_list = workbook.SheetNames
-    const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
-
-    xlData.forEach(async (obj: any) => {
-        console.log(obj.GATEWAY)
-        await prisma.$queryRawUnsafe(`INSERT INTO networktracker.host_equipment (NAME_EQUIPMENT, PRODUCER_EQUIPMENT, MODEL_EQUIPMENT, HANDLE_HABILITY, IP_EQUIPMENT, STATUS_EQUIPMENT, DT_EXECUTE, CSID_HOST) VALUES ('${obj.NOME}', 'TESTE', 'TESTE', 'HABILITADO', '${obj.GATEWAY}', 'LIVE', '2023-03-17 14:02:15.000', '3313')
-         `)
-    })
-    console.log('terminou')
 }
